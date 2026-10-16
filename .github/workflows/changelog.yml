@@ -1,3 +1,4 @@
+
 name: Changelog
 
 on:
@@ -6,11 +7,12 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write   # permite a Action fazer commit no repo
+  contents: write
 
 jobs:
   changelog:
     runs-on: ubuntu-latest
+
     steps:
       - name: Baixar repositório com histórico completo
         uses: actions/checkout@v4
@@ -28,7 +30,7 @@ jobs:
           echo "" >> CHANGELOG.md
 
       - name: Mostrar no resumo da execução
-        run: cat CHANGELOG.md >> $GITHUB_STEP_SUMMARY
+        run: cat CHANGELOG.md >> "$GITHUB_STEP_SUMMARY"
 
       - name: Salvar CHANGELOG.md no repositório
         run: |
@@ -37,3 +39,17 @@ jobs:
           git add CHANGELOG.md
           git diff --cached --quiet || git commit -m "docs: atualiza CHANGELOG [skip ci]"
           git push
+
+      - name: Criar ZIP do repositório
+        run: |
+          git archive --format=zip \
+            --output="${GITHUB_REPOSITORY##*/}-${GITHUB_SHA::7}.zip" \
+            HEAD
+
+      - name: Disponibilizar ZIP para download
+        uses: actions/upload-artifact@v4
+        with:
+          name: codigo-${{ github.sha }}
+          path: "*.zip"
+          if-no-files-found: error
+          retention-days: 30
