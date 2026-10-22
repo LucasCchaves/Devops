@@ -2,6 +2,8 @@
 
 Últimas alterações do repositório (gerado automaticamente).
 
+- **2026-10-22** – Create README.md (`f48d13c`) por Lucas_Chaves
+- **2026-10-22** – docs: atualiza CHANGELOG [skip ci] (`6a39a51`) por github-actions[bot]
 - **2026-10-22** – Create release.yml (`4641045`) por Lucas_Chaves
 - **2026-10-22** – docs: atualiza CHANGELOG [skip ci] (`7065ff3`) por github-actions[bot]
 - **2026-10-22** – Delete .github/workflows/release (`e343f29`) por Lucas_Chaves
