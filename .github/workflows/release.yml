@@ -1,0 +1,34 @@
+
+name: Criar ZIP da Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar código da versão
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - name: Criar arquivo ZIP
+        run: |
+          zip -r "${GITHUB_REPOSITORY##*/}-${GITHUB_REF_NAME}.zip" . \
+            -x ".git/*" ".github/*"
+
+      - name: Anexar ZIP à Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.event.release.tag_name }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh release upload "$TAG" \
+            "${REPO##*/}-${TAG}.zip" \
+            --repo "$REPO"
